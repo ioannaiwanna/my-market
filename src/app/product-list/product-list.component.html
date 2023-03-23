@@ -1,4 +1,10 @@
 <h3>Products</h3>
-<div *ngFor="let product of products">
-  <a>{{ product.name }}</a>
+
+<div *ngFor="let productCatalogue of productCatalogues">
+  <span
+    >{{ productCatalogue.product.name }} : {{ productCatalogue.quantity }}</span
+  >
+  <button type="buttom" (click)="addToCart(productCatalogue)">
+    Add One to Cart
+  </button>
 </div>
