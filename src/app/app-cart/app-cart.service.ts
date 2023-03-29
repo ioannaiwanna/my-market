@@ -13,6 +13,7 @@ export class CartService {
   getItems(): Product[] {
     return this.items;
   }
+
   clearCart() {
     this.items = [];
     return this.items;

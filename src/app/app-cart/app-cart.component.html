@@ -1,5 +1,5 @@
 <h3>Cart</h3>
-
-<div *ngFor="let product of products">
-  <span>{{ product.name }}</span>
+<div *ngFor="let productGroup of productsPerName | keyvalue">
+  <span>{{ productGroup.key }}: {{ productGroup.value.length }}</span>
 </div>
+<div>total:{{ products.length }}</div>

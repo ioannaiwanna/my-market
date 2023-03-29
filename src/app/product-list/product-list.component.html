@@ -1,10 +1,15 @@
+<button [routerLink]="['/checkout']">View your cart</button>
+
 <h3>Products</h3>
 
 <div *ngFor="let productCatalogue of productCatalogues">
-  <span
-    >{{ productCatalogue.product.name }} : {{ productCatalogue.quantity }}</span
-  >
+  <span>
+    {{ productCatalogue.product.name }} : {{ productCatalogue.quantity }}
+  </span>
   <button type="buttom" (click)="addToCart(productCatalogue)">
-    Add One to Cart
+    <span>Add One to Cart</span>
   </button>
+</div>
+<div>
+  <p>total: {{ totalItemsInCart }}</p>
 </div>
