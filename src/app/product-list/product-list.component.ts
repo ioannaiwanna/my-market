@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from './api-client.service';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, observable } from 'rxjs';
 
 export interface Product {
   name: string;
@@ -30,7 +29,7 @@ export class ProductListComponent implements OnInit {
   ) {
     // https://fc2f5925-e428-4180-bb23-1a0b64485b9f.mock.pstmn.io/products
     // response: [{"product":{"name":"Apples","size":"XL","price":2.45},"quantity":3},{"product":{"name":"Oranges","size":"XL","price":5},"quantity":30},{"product":{"name":"Bananas","size":"XL","price":3},"quantity":4}]
-    apiClient.getProducts().subscribe((productCatalogues) => {
+    this.apiClient.getProducts().subscribe((productCatalogues) => {
       this.productCatalogues = productCatalogues;
     });
   }
