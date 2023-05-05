@@ -7,6 +7,7 @@ import { ProductListComponent } from './product-list/product-list.component';
 import { AppCartComponent } from './app-cart/app-cart.component';
 import { HomeComponent } from './home/home.component';
 import { CartService } from './app-cart/app-cart.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,7 @@ import { CartService } from './app-cart/app-cart.service';
     AppCartComponent,
     HomeComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [CartService],
   bootstrap: [AppComponent],
 })
