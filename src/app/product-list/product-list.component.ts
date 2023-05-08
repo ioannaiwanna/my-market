@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from './api-client.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { NgFor } from '@angular/common';
 
 export interface Product {
   name: string;
@@ -15,9 +16,11 @@ export interface ProductCatalogue {
 }
 
 @Component({
-  selector: 'app-product-list',
-  templateUrl: './product-list.component.html',
-  styleUrls: ['./product-list.component.scss'],
+    selector: 'app-product-list',
+    templateUrl: './product-list.component.html',
+    styleUrls: ['./product-list.component.scss'],
+    standalone: true,
+    imports: [RouterLink, NgFor],
 })
 export class ProductListComponent implements OnInit {
   productCatalogues: ProductCatalogue[] = [];

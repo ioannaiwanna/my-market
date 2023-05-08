@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CartService } from './app-cart.service';
 import { Product } from '../product-list/product-list.component';
+import { NgFor, KeyValuePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-app-cart',
-  templateUrl: './app-cart.component.html',
-  styleUrls: ['./app-cart.component.scss'],
+    selector: 'app-app-cart',
+    templateUrl: './app-cart.component.html',
+    styleUrls: ['./app-cart.component.scss'],
+    standalone: true,
+    imports: [NgFor, KeyValuePipe],
 })
 export class AppCartComponent implements OnInit {
   products: Product[];
