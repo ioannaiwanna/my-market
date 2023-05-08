@@ -1,8 +1,0 @@
-<h3>Cart</h3>
-<button>Empty Cart</button>
-<div *ngFor="let productGroup of productsPerName | keyvalue">
-  <span>{{ productGroup.key }}: {{ productGroup.value.length }}</span>
-  <span> Price: </span>
-</div>
-
-<div>Total price :{{ products.length }}</div>

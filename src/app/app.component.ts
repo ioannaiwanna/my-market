@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: true,
-    imports: [RouterOutlet]
+  selector: 'app-root',
+  template: `
+    <h2>MY MARKET</h2>
+    <router-outlet></router-outlet>
+  `,
+  standalone: true,
+  imports: [RouterOutlet],
 })
 export class AppComponent {
   title = 'myMarket';

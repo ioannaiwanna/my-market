@@ -4,11 +4,19 @@ import { Product } from '../product-list/product-list.component';
 import { NgFor, KeyValuePipe } from '@angular/common';
 
 @Component({
-    selector: 'app-app-cart',
-    templateUrl: './app-cart.component.html',
-    styleUrls: ['./app-cart.component.scss'],
-    standalone: true,
-    imports: [NgFor, KeyValuePipe],
+  selector: 'app-app-cart',
+  template: `
+    <h3>Cart</h3>
+    <button>Empty Cart</button>
+    <div *ngFor="let productGroup of productsPerName | keyvalue">
+      <span>{{ productGroup.key }}: {{ productGroup.value.length }}</span>
+      <span> Price: </span>
+    </div>
+
+    <div>Total price :{{ products.length }}</div>
+  `,
+  standalone: true,
+  imports: [NgFor, KeyValuePipe],
 })
 export class AppCartComponent implements OnInit {
   products: Product[];

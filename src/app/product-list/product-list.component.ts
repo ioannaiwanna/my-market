@@ -16,11 +16,26 @@ export interface ProductCatalogue {
 }
 
 @Component({
-    selector: 'app-product-list',
-    templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.scss'],
-    standalone: true,
-    imports: [RouterLink, NgFor],
+  selector: 'app-product-list',
+  template: `
+    <button [routerLink]="['/checkout']">View your cart</button>
+
+    <h3>Products</h3>
+
+    <div *ngFor="let productCatalogue of productCatalogues">
+      <span>
+        {{ productCatalogue.product.name }} : {{ productCatalogue.quantity }}
+      </span>
+      <button type="button" (click)="addToCart(productCatalogue)">
+        <span>Add One to Cart</span>
+      </button>
+    </div>
+    <div>
+      <p>total: {{ totalItemsInCart }}</p>
+    </div>
+  `,
+  standalone: true,
+  imports: [RouterLink, NgFor],
 })
 export class ProductListComponent implements OnInit {
   productCatalogues: ProductCatalogue[] = [];
