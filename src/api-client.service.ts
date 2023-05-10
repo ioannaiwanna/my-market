@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ProductCatalogue } from './product-list.component';
+import { Product } from './app/product-list/product-list.component';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ApiClientService {
   constructor(private http: HttpClient) {}
-  getProducts(): Observable<ProductCatalogue[]> {
-    return this.http.get<ProductCatalogue[]>(`${environment.apiUrl}`);
+  getProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${environment.apiUrl}/products`);
   }
 }
