@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CartService } from './app-cart.service';
-import { Product } from '../product-list/product-list.component';
+import { CartProduct, CartService } from './app-cart.service';
 import { NgFor, KeyValuePipe } from '@angular/common';
 import { Location } from '@angular/common';
-
-export interface CartProduct {
-  product: Product;
-  quantity: number;
-  totalPrice: number;
-}
 
 @Component({
   selector: 'app-app-cart',
@@ -33,31 +26,11 @@ export interface CartProduct {
   imports: [NgFor, KeyValuePipe],
 })
 export class AppCartComponent implements OnInit {
-  cartProducts: CartProduct[];
-  cartTotal: number;
+  cartProducts: CartProduct[] = this.cartService.items;
+  cartTotal: number = this.cartService.cartTotal;
 
-  constructor(private cartService: CartService, private location: Location) {
-    this.cartProducts = Object.values(
-      this.cartService.getItems().reduce((acc, product) => {
-        if (acc[product.name]) {
-          acc[product.name].quantity++;
-          acc[product.name].totalPrice =
-            product.price * acc[product.name].quantity;
-        } else {
-          acc[product.name] = {
-            product: product,
-            quantity: 1,
-            totalPrice: product.price,
-          };
-        }
-        return acc;
-      }, {} as Record<string, CartProduct>)
-    );
-    this.cartTotal = this.cartProducts.reduce(
-      (total, cur) => total + cur.totalPrice,
-      0
-    );
-  }
+  constructor(private cartService: CartService, private location: Location) {}
+
   back() {
     this.location.back();
   }

@@ -35,7 +35,10 @@ export interface Product {
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  totalItemsInCart: number = this.cartService.getItems().length;
+  totalItemsInCart: number = this.cartService.items.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
   constructor(
     private cartService: CartService,
     private apiClient: ApiClientService
@@ -49,6 +52,9 @@ export class ProductListComponent implements OnInit {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
-    this.totalItemsInCart = this.cartService.getItems().length;
+    this.totalItemsInCart = this.cartService.items.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
   }
 }
