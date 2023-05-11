@@ -19,9 +19,7 @@ export interface Product {
     <h3>Products</h3>
 
     <div *ngFor="let product of products">
-      <span>
-        {{ product.name }}
-      </span>
+      <span> {{ product.name }} : {{ product.price }}€ </span>
       <button type="button" (click)="addToCart(product)">
         <span>Add to Cart</span>
       </button>

@@ -12,15 +12,15 @@ import { Location } from '@angular/common';
     </div>
 
     <div>
-      <button>Empty Cart</button>
+      <button (click)="clear()">Empty Cart</button>
     </div>
 
     <div *ngFor="let cartProduct of cartProducts">
       <span>{{ cartProduct.product.name }}: {{ cartProduct.quantity }}</span>
-      <span> Price: {{ cartProduct.totalPrice.toFixed(2) }} $</span>
+      <span> Cost: {{ cartProduct.totalPrice.toFixed(2) }}€</span>
     </div>
 
-    <div>Total:{{ cartTotal.toFixed(2) }} $</div>
+    <div>Total:{{ cartTotal.toFixed(2) }}€</div>
   `,
   standalone: true,
   imports: [NgFor, KeyValuePipe],
@@ -33,6 +33,12 @@ export class AppCartComponent implements OnInit {
 
   back() {
     this.location.back();
+  }
+
+  clear() {
+    this.cartService.clearCart();
+    this.cartProducts = this.cartService.items;
+    this.cartTotal = this.cartService.cartTotal;
   }
 
   ngOnInit(): void {}
