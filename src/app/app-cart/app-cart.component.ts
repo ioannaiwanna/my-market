@@ -17,10 +17,10 @@ import { Location } from '@angular/common';
 
     <div *ngFor="let cartProduct of cartProducts">
       <span>{{ cartProduct.product.name }}: {{ cartProduct.quantity }}</span>
-      <span> Price: {{ cartProduct.totalPrice }} $</span>
+      <span> Price: {{ cartProduct.totalPrice.toFixed(2) }} $</span>
     </div>
 
-    <div>Total:{{ cartTotal }} $</div>
+    <div>Total:{{ cartTotal.toFixed(2) }} $</div>
   `,
   standalone: true,
   imports: [NgFor, KeyValuePipe],
