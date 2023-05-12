@@ -3,7 +3,8 @@ import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from '../../api-client.service';
 import { RouterLink } from '@angular/router';
 
-import { NgFor } from '@angular/common';
+import { AsyncPipe, NgFor } from '@angular/common';
+import { Observable } from 'rxjs';
 
 export interface Product {
   name: string;
@@ -25,18 +26,16 @@ export interface Product {
       </button>
     </div>
     <div>
-      <p>total: {{ totalItemsInCart }}</p>
+      <p>total: {{ totalItemsInCart$ | async }}</p>
     </div>
   `,
   standalone: true,
-  imports: [RouterLink, NgFor],
+  imports: [RouterLink, NgFor, AsyncPipe],
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  totalItemsInCart: number = this.cartService.items.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  totalItemsInCart$: Observable<number> = this.cartService.cartTotalQuantity$;
+
   constructor(
     private cartService: CartService,
     private apiClient: ApiClientService
@@ -50,9 +49,5 @@ export class ProductListComponent implements OnInit {
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);
-    this.totalItemsInCart = this.cartService.items.reduce(
-      (total, item) => total + item.quantity,
-      0
-    );
   }
 }
