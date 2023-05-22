@@ -1,8 +1,14 @@
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { provideClientHydration } from '@angular/platform-browser';
 import { Product } from '../product-list/product-list.component';
-import { Injectable } from '@angular/core';
+import {
+  Injectable,
+  Signal,
+  WritableSignal,
+  computed,
+  signal,
+} from '@angular/core';
 
-export interface CartProduct {
+export interface CartBag {
   product: Product;
   quantity: number;
   totalPrice: number;
@@ -10,42 +16,36 @@ export interface CartProduct {
 
 @Injectable()
 export class CartService {
-  cartProductsSubject = new BehaviorSubject<CartProduct[]>([]);
-  cartProducts$: Observable<CartProduct[]> =
-    this.cartProductsSubject.asObservable();
-  cartTotalPrice$: Observable<number> = this.cartProducts$.pipe(
-    map((cartProducts: CartProduct[]) =>
-      cartProducts.reduce((sum, cartProduct) => sum + cartProduct.totalPrice, 0)
-    )
+  cart: WritableSignal<CartBag[]> = signal([]);
+  cartTotalPrice: Signal<number> = computed(() =>
+    this.cart().reduce((sum, cartProduct) => sum + cartProduct.totalPrice, 0)
   );
-  cartTotalQuantity$: Observable<number> = this.cartProducts$.pipe(
-    map((cartProducts: CartProduct[]) =>
-      cartProducts.reduce((sum, cartproduct) => sum + cartproduct.quantity, 0)
-    )
+  cartTotalQuantity: Signal<number> = computed(() =>
+    this.cart().reduce((sum, cartproduct) => sum + cartproduct.quantity, 0)
   );
 
   constructor() {}
 
   addToCart(product: Product) {
-    const cartProducts = this.cartProductsSubject.getValue();
-    const cartProduct = cartProducts.find(
-      (cartProduct) => cartProduct.product.name === product.name
-    );
-
-    if (cartProduct) {
-      cartProduct.quantity++;
-      cartProduct.totalPrice = cartProduct.quantity * cartProduct.product.price;
-    } else {
-      cartProducts.push({
-        product: product,
-        quantity: 1,
-        totalPrice: product.price,
-      });
-    }
-    this.cartProductsSubject.next(cartProducts);
+    this.cart.update((cartBags) => {
+      const cartbag = cartBags.find(
+        (cartbag) => cartbag.product.name === product.name
+      );
+      if (cartbag !== undefined) {
+        cartbag.quantity++;
+        cartbag.totalPrice = cartbag.quantity * cartbag.product.price;
+      } else {
+        cartBags.push({
+          product: product,
+          quantity: 1,
+          totalPrice: product.price,
+        });
+      }
+      return cartBags;
+    });
   }
 
   clearCart() {
-    this.cartProductsSubject.next([]);
+    this.cart.set([]);
   }
 }

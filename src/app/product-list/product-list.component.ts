@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from '../../api-client.service';
 import { RouterLink } from '@angular/router';
-
 import { AsyncPipe, NgFor } from '@angular/common';
-import { Observable } from 'rxjs';
 
 export interface Product {
   name: string;
@@ -26,15 +24,15 @@ export interface Product {
       </button>
     </div>
     <div>
-      <p>total: {{ totalItemsInCart$ | async }}</p>
+      <p>total: {{ totalItemsInCart() }}</p>
     </div>
   `,
   standalone: true,
-  imports: [RouterLink, NgFor, AsyncPipe],
+  imports: [RouterLink, NgFor],
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
-  totalItemsInCart$: Observable<number> = this.cartService.cartTotalQuantity$;
+  totalItemsInCart: Signal<number> = this.cartService.cartTotalQuantity;
 
   constructor(
     private cartService: CartService,

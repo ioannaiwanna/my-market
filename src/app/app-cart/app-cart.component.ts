@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { CartProduct, CartService } from './app-cart.service';
+import {
+  Component,
+  OnInit,
+  Signal,
+  WritableSignal,
+  signal,
+} from '@angular/core';
+import { CartBag, CartService } from './app-cart.service';
 import { NgFor, KeyValuePipe, AsyncPipe } from '@angular/common';
 import { Location } from '@angular/common';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-app-cart',
@@ -16,21 +21,20 @@ import { Observable } from 'rxjs';
       <button (click)="clear()">Empty Cart</button>
     </div>
 
-    <div *ngFor="let cartProduct of cartProducts$ | async">
+    <div *ngFor="let cartProduct of cartProducts()">
       <span>{{ cartProduct.product.name }}: {{ cartProduct.quantity }}</span>
       <span> Cost: {{ cartProduct.totalPrice.toFixed(2) }}€</span>
     </div>
 
-    <div>Total:{{ cartTotal$ | async }}€</div>
+    <div>Total:{{ cartTotal() }}€</div>
   `,
   standalone: true,
   imports: [NgFor, KeyValuePipe, AsyncPipe],
 })
 export class AppCartComponent implements OnInit {
-  cartTotal$: Observable<number> = this.cartService.cartTotalPrice$;
-  cartProducts$: Observable<CartProduct[]> = this.cartService.cartProducts$;
-
-  constructor(private cartService: CartService, private location: Location) {}
+  cartTotal: Signal<number> = this.cartService.cartTotalPrice;
+  cartProducts: WritableSignal<CartBag[]> = this.cartService.cart;
+  constructor(public cartService: CartService, private location: Location) {}
 
   back() {
     this.location.back();
