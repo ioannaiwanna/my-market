@@ -1,51 +1,78 @@
-import { provideClientHydration } from '@angular/platform-browser';
-import { Product } from '../product-list/product-list.component';
+import { CartBag, Product, Voucher } from '../interfaces';
 import {
   Injectable,
   Signal,
   WritableSignal,
   computed,
+  effect,
   signal,
 } from '@angular/core';
 
-export interface CartBag {
-  product: Product;
-  quantity: number;
-  totalPrice: number;
-}
-
 @Injectable()
 export class CartService {
-  cart: WritableSignal<CartBag[]> = signal([]);
+  private _selectedVoucher: WritableSignal<Voucher | undefined> =
+    signal(undefined);
+  selectedVoucher: Signal<Voucher | undefined> = computed(
+    this._selectedVoucher
+  );
+  private _cart: WritableSignal<CartBag[]> = signal([]);
+  cart: Signal<CartBag[]> = computed(this._cart);
   cartTotalPrice: Signal<number> = computed(() =>
-    this.cart().reduce((sum, cartProduct) => sum + cartProduct.totalPrice, 0)
+    this._cart().reduce((sum, cartProduct) => sum + cartProduct.totalPrice(), 0)
   );
   cartTotalQuantity: Signal<number> = computed(() =>
-    this.cart().reduce((sum, cartproduct) => sum + cartproduct.quantity, 0)
+    this._cart().reduce((sum, cartproduct) => sum + cartproduct.quantity(), 0)
+  );
+  cartDiscountedTotalPrice: Signal<number> = computed(() =>
+    this._cart().reduce(
+      (sum, cartproduct) => sum + cartproduct.discountedTotalPrice(),
+      0
+    )
   );
 
-  constructor() {}
-
   addToCart(product: Product) {
-    this.cart.update((cartBags) => {
+    this._cart.update((cartBags) => {
       const cartbag = cartBags.find(
         (cartbag) => cartbag.product.name === product.name
       );
-      if (cartbag !== undefined) {
-        cartbag.quantity++;
-        cartbag.totalPrice = cartbag.quantity * cartbag.product.price;
+      if (cartbag) {
+        cartbag.quantity.update((oldQuantity) => (oldQuantity += 1));
       } else {
-        cartBags.push({
-          product: product,
-          quantity: 1,
-          totalPrice: product.price,
-        });
+        cartBags.push(this.createNewCartBag(product));
       }
       return cartBags;
     });
   }
 
+  setSelectedVoucher(voucher: Voucher) {
+    this._selectedVoucher.set(voucher);
+  }
+
   clearCart() {
-    this.cart.set([]);
+    this._cart.set([]);
+    this._selectedVoucher.set(undefined);
+  }
+
+  private createNewCartBag(product: Product): CartBag {
+    const quantity: WritableSignal<number> = signal(1);
+    const totalPrice: Signal<number> = computed(
+      () => product.price * quantity()
+    );
+    const discountedTotalPrice: Signal<number> = computed(() => {
+      if (
+        this.selectedVoucher()?.appliesOn.includes(product.name.toUpperCase())
+      ) {
+        return (
+          totalPrice() - totalPrice() * this.selectedVoucher()!.discountPercent
+        );
+      }
+      return totalPrice();
+    });
+    return {
+      product: product,
+      quantity: quantity,
+      totalPrice: totalPrice,
+      discountedTotalPrice: discountedTotalPrice,
+    };
   }
 }

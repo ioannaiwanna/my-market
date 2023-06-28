@@ -2,13 +2,8 @@ import { Component, OnInit, Signal } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from '../../api-client.service';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe, NgFor } from '@angular/common';
-
-export interface Product {
-  name: string;
-  size: string;
-  price: number;
-}
+import { NgFor } from '@angular/common';
+import { Product } from '../interfaces';
 
 @Component({
   selector: 'app-product-list',

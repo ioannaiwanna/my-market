@@ -1,13 +1,9 @@
-import {
-  Component,
-  OnInit,
-  Signal,
-  WritableSignal,
-  signal,
-} from '@angular/core';
-import { CartBag, CartService } from './app-cart.service';
-import { NgFor, KeyValuePipe, AsyncPipe } from '@angular/common';
+import { Component, OnInit, Signal, WritableSignal } from '@angular/core';
+import { CartService } from './app-cart.service';
+import { NgFor, NgIf } from '@angular/common';
 import { Location } from '@angular/common';
+import { AppVoucherComponent } from '../app-voucher/app-voucher.component';
+import { CartBag } from '../interfaces';
 
 @Component({
   selector: 'app-app-cart',
@@ -22,19 +18,34 @@ import { Location } from '@angular/common';
     </div>
 
     <div *ngFor="let cartProduct of cartProducts()">
-      <span>{{ cartProduct.product.name }}: {{ cartProduct.quantity }}</span>
-      <span> Cost: {{ cartProduct.totalPrice.toFixed(2) }}€</span>
+      <span>{{ cartProduct.product.name }}: {{ cartProduct.quantity() }}</span>
+      <span> Cost: {{ cartProduct.totalPrice().toFixed(2) }}€</span>
+      <span
+        *ngIf="cartProduct.totalPrice() !== cartProduct.discountedTotalPrice()"
+      >
+        Discounted Cost:
+        {{ cartProduct.discountedTotalPrice().toFixed(2) }}€</span
+      >
     </div>
 
-    <div>Total:{{ cartTotal() }}€</div>
+    <div>Total:{{ cartTotal().toFixed(2) }}€</div>
+    <div *ngIf="shouldShowDiscountTotal()">
+      Discounted Total: {{ discountedTotal().toFixed(2) }}
+    </div>
+    <app-app-voucher></app-app-voucher>
   `,
   standalone: true,
-  imports: [NgFor, KeyValuePipe, AsyncPipe],
+  imports: [NgFor, NgIf, AppVoucherComponent],
 })
 export class AppCartComponent implements OnInit {
   cartTotal: Signal<number> = this.cartService.cartTotalPrice;
-  cartProducts: WritableSignal<CartBag[]> = this.cartService.cart;
+  discountedTotal: Signal<number> = this.cartService.cartDiscountedTotalPrice;
+  cartProducts: Signal<CartBag[]> = this.cartService.cart;
   constructor(public cartService: CartService, private location: Location) {}
+
+  shouldShowDiscountTotal(): boolean {
+    return this.cartTotal() !== this.discountedTotal() && this.cartTotal() > 0;
+  }
 
   back() {
     this.location.back();
