@@ -1,9 +1,10 @@
-import { Component, OnInit, Signal, WritableSignal } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { CartService } from './app-cart.service';
 import { NgFor, NgIf } from '@angular/common';
 import { Location } from '@angular/common';
 import { AppVoucherComponent } from '../app-voucher/app-voucher.component';
 import { CartBag } from '../interfaces';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-app-cart',
@@ -33,11 +34,12 @@ import { CartBag } from '../interfaces';
       Discounted Total: {{ discountedTotal().toFixed(2) }}
     </div>
     <app-app-voucher></app-app-voucher>
+    <button [routerLink]="['/paymentform']">Pay</button>
   `,
   standalone: true,
-  imports: [NgFor, NgIf, AppVoucherComponent],
+  imports: [NgFor, NgIf, AppVoucherComponent, RouterLink],
 })
-export class AppCartComponent implements OnInit {
+export class AppCartComponent {
   cartTotal: Signal<number> = this.cartService.cartTotalPrice;
   discountedTotal: Signal<number> = this.cartService.cartDiscountedTotalPrice;
   cartProducts: Signal<CartBag[]> = this.cartService.cart;
@@ -54,6 +56,4 @@ export class AppCartComponent implements OnInit {
   clear() {
     this.cartService.clearCart();
   }
-
-  ngOnInit(): void {}
 }

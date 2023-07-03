@@ -4,7 +4,6 @@ import {
   Signal,
   WritableSignal,
   computed,
-  effect,
   signal,
 } from '@angular/core';
 

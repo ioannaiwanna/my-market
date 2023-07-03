@@ -25,7 +25,7 @@ import { Product } from '../interfaces';
   standalone: true,
   imports: [RouterLink, NgFor],
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent {
   products: Product[] = [];
   totalItemsInCart: Signal<number> = this.cartService.cartTotalQuantity;
 
@@ -37,8 +37,6 @@ export class ProductListComponent implements OnInit {
       this.products = products;
     });
   }
-
-  ngOnInit(): void {}
 
   addToCart(product: Product) {
     this.cartService.addToCart(product);

@@ -13,7 +13,7 @@ import { Voucher } from '../interfaces';
       Enter your voucher here!
       <input #box />
       <button (click)="onClick(box.value)">Apply</button>
-      <p>{{ value()?.name }}</p>
+      <!-- <p>{{ value()?.name }}</p> -->
     </div>
   `,
 })
