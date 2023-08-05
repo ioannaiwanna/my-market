@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from '../../api-client.service';
 import { RouterLink } from '@angular/router';
@@ -8,18 +8,24 @@ import { Product } from '../interfaces';
 @Component({
   selector: 'app-product-list',
   template: `
-    <button [routerLink]="['/checkout']">View your cart</button>
+    <div
+      class="flex items-center justify-center w-full flex-col space-y-2  ..."
+    >
+      <h3>Products</h3>
 
-    <h3>Products</h3>
-
-    <div *ngFor="let product of products">
-      <span> {{ product.name }} : {{ product.price }}€ </span>
-      <button type="button" (click)="addToCart(product)">
-        <span>Add to Cart</span>
-      </button>
-    </div>
-    <div>
-      <p>total: {{ totalItemsInCart() }}</p>
+      <div *ngFor="let product of products">
+        <span> {{ product.name }} : {{ product.price }}€ </span>
+        <button
+          class="px-4 py-1 text-sm text-blue-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+          type="button"
+          (click)="addToCart(product)"
+        >
+          <span>Add to Cart</span>
+        </button>
+      </div>
+      <div>
+        <p>total: {{ totalItemsInCart() }}</p>
+      </div>
     </div>
   `,
   standalone: true,

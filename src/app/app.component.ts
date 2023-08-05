@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
   selector: 'app-root',
   template: `
-    <h2>MY MARKET</h2>
+    <app-header></app-header>
     <router-outlet></router-outlet>
   `,
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HeaderComponent],
 })
 export class AppComponent {
   title = 'myMarket';

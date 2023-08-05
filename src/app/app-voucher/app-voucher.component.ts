@@ -9,11 +9,17 @@ import { Voucher } from '../interfaces';
   standalone: true,
   imports: [CommonModule],
   template: `
+    <div class="flex flex-row space-x-2 ...">
+      <div>Enter your voucher here!</div>
+      <div><input #box class="border border-black" /></div>
+    </div>
     <div>
-      Enter your voucher here!
-      <input #box />
-      <button (click)="onClick(box.value)">Apply</button>
-      <!-- <p>{{ value()?.name }}</p> -->
+      <button
+        (click)="onClick(box.value)"
+        class="px-4 py-1 text-sm border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
+      >
+        Apply
+      </button>
     </div>
   `,
 })
