@@ -4,8 +4,11 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
-  template: `<div class="flex flex-row justify-between">
-    <div class="flex space-x-2 px-4 py-1 text-sm font-semibold">
+  template: `<div class="flex flex-row justify-between mb-2">
+    <div
+      [routerLink]="['productlist']"
+      class="flex space-x-2 px-4 py-1 text-sm font-semibold text-green-600 rounded-full border border-green-600  hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 mr-2"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -22,12 +25,25 @@ import { RouterLink } from '@angular/router';
       </svg>
       <h2>MY MARKET</h2>
     </div>
-    <div>
+    <div class="flex justify-center items-center">
       <button
         [routerLink]="['/checkout']"
-        class="px-4 py-1 text-sm border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
+        class="px-4 py-1 text-sm text-purple-600 font-semibold border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
       >
-        View your cart
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
+          />
+        </svg>
       </button>
     </div>
   </div>`,

@@ -13,9 +13,9 @@ import {
   standalone: true,
   imports: [ReactiveFormsModule, NgIf],
   template: `<form [formGroup]="cardForm" (ngSubmit)="submitForm()">
-    <div class="flex flex-col space-y-2  ...">
-      <div>
-        <label for="cardNumber">Card Number:</label>
+    <div class="flex flex-col space-y-2 ...">
+      <div class="flex flex-row items-center space-x-2">
+        <label for="cardNumber">Card Number</label>
         <input
           class="border border-black"
           type="text"
@@ -23,21 +23,24 @@ import {
           formControlName="cardNumber"
           required
         />
+        <div class="flex justify-center"></div>
         <span
           *ngIf="
             this.cardForm.controls['cardNumber'].dirty && cardNumberValid()
           "
+          class="text-green-600"
           >✓</span
         >
         <span
           *ngIf="
             this.cardForm.controls['cardNumber'].dirty && !cardNumberValid()
           "
-          >❌!</span
+          class="text-red-600"
+          >❌</span
         >
       </div>
-      <div>
-        <label for="cardName">Card Name:</label>
+      <div class="flex flex-row items-center space-x-2">
+        <label for="cardName">Card Name</label>
         <input
           class="border border-black"
           type="text"
@@ -45,17 +48,21 @@ import {
           formControlName="cardName"
           required
         />
-        <span
-          *ngIf="this.cardForm.controls['cardName'].dirty && cardNameValid()"
-          >✓</span
-        >
-        <span
-          *ngIf="this.cardForm.controls['cardName'].dirty && !cardNameValid()"
-          >❌!</span
-        >
+        <div class="flex justify-center">
+          <span
+            *ngIf="this.cardForm.controls['cardName'].dirty && cardNameValid()"
+            class="text-green-600"
+            >✓</span
+          >
+          <span
+            *ngIf="this.cardForm.controls['cardName'].dirty && !cardNameValid()"
+            class="text-red-600"
+            >❌</span
+          >
+        </div>
       </div>
-      <div>
-        <label for="expirationDate">Expiration Date:</label>
+      <div class="flex flex-row items-center space-x-2">
+        <label for="expirationDate">Expiration Date</label>
         <input
           class="border border-black"
           type="text"
@@ -63,23 +70,27 @@ import {
           formControlName="expirationDate"
           required
         />
-        <span
-          *ngIf="
-            this.cardForm.controls['expirationDate'].dirty &&
-            expirationDateValid()
-          "
-          >✓</span
-        >
-        <span
-          *ngIf="
-            this.cardForm.controls['expirationDate'].dirty &&
-            !expirationDateValid()
-          "
-          >❌!</span
-        >
+        <div class="flex justify-center">
+          <span
+            *ngIf="
+              this.cardForm.controls['expirationDate'].dirty &&
+              expirationDateValid()
+            "
+            class="text-green-600"
+            >✓</span
+          >
+          <span
+            *ngIf="
+              this.cardForm.controls['expirationDate'].dirty &&
+              !expirationDateValid()
+            "
+            class="text-red-600"
+            >❌</span
+          >
+        </div>
       </div>
-      <div>
-        <label for="cvv">CVV:</label>
+      <div class="flex flex-row items-center space-x-2">
+        <label for="cvv">CVV</label>
         <input
           class="border border-black"
           type="text"
@@ -87,16 +98,24 @@ import {
           formControlName="cvv"
           required
         />
-        <span *ngIf="this.cardForm.controls['cvv'].dirty && cvvValid()">✓</span>
-        <span *ngIf="this.cardForm.controls['cvv'].dirty && !cvvValid()"
-          >❌!</span
-        >
+        <div class="flex justify-center">
+          <span
+            *ngIf="this.cardForm.controls['cvv'].dirty && cvvValid()"
+            class="text-green-600"
+            >✓</span
+          >
+          <span
+            *ngIf="this.cardForm.controls['cvv'].dirty && !cvvValid()"
+            class="text-red-600"
+            >❌</span
+          >
+        </div>
       </div>
       <div>
         <button
           (click)="submitForm()"
           [disabled]="!formValid()"
-          class="px-4 py-1 text-sm border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
+          class="px-4 py-1 text-sm text-purple-600 border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
         >
           Pay
         </button>
