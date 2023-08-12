@@ -143,7 +143,6 @@ export class PaymentformComponent implements OnInit {
       ],
       cvv: ['', [Validators.required, Validators.pattern('[0-9]{3,4}')]],
     });
-    // this.cardForm.addControl('', TrimFormControl);
   }
   submitForm() {
     if (this.formValid()) {

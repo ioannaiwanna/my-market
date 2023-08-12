@@ -8,9 +8,7 @@ import { Product } from '../interfaces';
 @Component({
   selector: 'app-product-list',
   template: `
-    <div
-      class="flex items-center justify-center w-full flex-col space-y-2  ..."
-    >
+    <div class="flex flex-col justify-center items-center space-y-2  w-full">
       <div *ngFor="let product of products">
         <span> {{ product.name }} : {{ product.price }}€ </span>
         <button

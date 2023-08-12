@@ -1,14 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../header/header.component';
 import { ProductListComponent } from '../product-list/product-list.component';
 
 @Component({
   selector: 'app-home',
-  template: `<app-product-list></app-product-list>`,
   standalone: true,
-  imports: [ProductListComponent],
+  imports: [CommonModule, HeaderComponent, ProductListComponent],
+  template: `<app-header></app-header>
+    <app-product-list></app-product-list> `,
 })
-export class HomeComponent implements OnInit {
-  constructor() {}
-
-  ngOnInit(): void {}
-}
+export class HomeComponent {}

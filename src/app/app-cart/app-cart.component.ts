@@ -4,10 +4,12 @@ import { NgFor, NgIf } from '@angular/common';
 import { AppVoucherComponent } from '../app-voucher/app-voucher.component';
 import { CartBag } from '../interfaces';
 import { PaymentformComponent } from '../paymentform/paymentform.component';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-app-cart',
   template: `
+    <app-header></app-header>
     <div>
       <div>
         <div class=" flex w-full  space-x-2  ...">
@@ -82,7 +84,13 @@ import { PaymentformComponent } from '../paymentform/paymentform.component';
     </div>
   `,
   standalone: true,
-  imports: [NgFor, NgIf, AppVoucherComponent, PaymentformComponent],
+  imports: [
+    NgFor,
+    NgIf,
+    AppVoucherComponent,
+    PaymentformComponent,
+    HeaderComponent,
+  ],
 })
 export class AppCartComponent {
   cartTotal: Signal<number> = this.cartService.cartTotalPrice;

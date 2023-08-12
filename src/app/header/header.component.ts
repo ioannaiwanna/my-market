@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-header',
   template: `<div class="flex flex-row justify-between mb-2">
     <div
-      [routerLink]="['productlist']"
+      [routerLink]="['/home']"
       class="flex space-x-2 px-4 py-1 text-sm font-semibold text-green-600 rounded-full border border-green-600  hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 mr-2"
     >
       <svg
