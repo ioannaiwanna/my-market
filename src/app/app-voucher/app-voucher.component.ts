@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from 'src/api-client.service';
 import { Voucher } from '../interfaces';
+import { AppCartComponent } from '../app-cart/app-cart.component';
 @Component({
   selector: 'app-app-voucher',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AppCartComponent],
   template: `
     <div class="flex space-x-2">
       <div class="flex-item">

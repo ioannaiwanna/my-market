@@ -8,11 +8,11 @@ import { Product } from '../interfaces';
 @Component({
   selector: 'app-product-list',
   template: `
-    <div class="flex flex-col justify-center items-center space-y-2  w-full">
+    <div class="flex flex-col justify-center items-center space-y-2 ">
       <div *ngFor="let product of products">
         <span> {{ product.name }} : {{ product.price }}€ </span>
         <button
-          class="px-4 py-1 text-sm text-blue-600 font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+          class="px-4 py-1 text-sm text-blue-600 font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           type="button"
           (click)="addToCart(product)"
         >

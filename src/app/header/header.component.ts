@@ -46,7 +46,7 @@ import { RouterLink } from '@angular/router';
         </svg>
       </button>
     </div>
-  </div>`,
+  </div> `,
   standalone: true,
   imports: [CommonModule, RouterLink],
 })

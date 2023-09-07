@@ -6,7 +6,6 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-// import { TrimFormControl } from '../shared/TrimFormControl';
 
 @Component({
   selector: 'app-paymentform',
@@ -146,8 +145,7 @@ export class PaymentformComponent implements OnInit {
   }
   submitForm() {
     if (this.formValid()) {
-      // Perform card validation logic here
-      console.log('Form submitted successfully');
+      alert('Form submitted successfully');
     }
   }
   cardNumberValid(): boolean {
