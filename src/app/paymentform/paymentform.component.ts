@@ -6,11 +6,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { NotificationMsgComponent } from '../notification-msg/notification-msg.component';
 
 @Component({
   selector: 'app-paymentform',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, NotificationMsgComponent],
   template: `<form [formGroup]="cardForm" (ngSubmit)="submitForm()">
     <div class="flex flex-col space-y-2 ...">
       <div class="flex flex-row items-center space-x-2">
@@ -119,11 +120,18 @@ import {
           Pay
         </button>
       </div>
+      <app-notification-msg
+        *ngIf="showNotification"
+        [message]="notificationMessage"
+        (close)="closeNotification()"
+      ></app-notification-msg>
     </div>
   </form>`,
 })
 export class PaymentformComponent implements OnInit {
   cardForm!: FormGroup;
+  showNotification = false;
+  notificationMessage = '';
 
   constructor(private formBuilder: FormBuilder) {}
   ngOnInit(): void {
@@ -145,7 +153,7 @@ export class PaymentformComponent implements OnInit {
   }
   submitForm() {
     if (this.formValid()) {
-      alert('Form submitted successfully');
+      this.openNotification('GOODBYE');
     }
   }
   cardNumberValid(): boolean {
@@ -162,5 +170,16 @@ export class PaymentformComponent implements OnInit {
   }
   formValid(): boolean {
     return this.cardForm.status === 'VALID';
+  }
+  openNotification(message: string) {
+    this.notificationMessage = message;
+    this.showNotification = true;
+    setTimeout(() => {
+      this.closeNotification();
+    }, 5000);
+  }
+  closeNotification() {
+    this.showNotification = false;
+    this.notificationMessage = '';
   }
 }
