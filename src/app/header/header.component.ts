@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
   template: `<div class="flex flex-row justify-between mb-2">
     <div
-      [routerLink]="['/home']"
+      [routerLink]="isRouterLinkDisabled ? [] : ['/home']"
+      (click)="navigate()"
       class="flex space-x-2 px-4 py-1 text-sm font-semibold text-green-600 rounded-full border border-green-600  hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 mr-2"
     >
       <svg
@@ -27,7 +28,8 @@ import { RouterLink } from '@angular/router';
     </div>
     <div class="flex justify-center items-center">
       <button
-        [routerLink]="['/checkout']"
+        [routerLink]="isRouterLinkDisabled ? [] : ['/checkout']"
+        (click)="navigate()"
         class="px-4 py-1 text-sm text-purple-600 font-semibold border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
       >
         <svg
@@ -50,4 +52,15 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+  isRouterLinkDisabled: boolean = true;
+  constructor(private route: Router) {}
+
+  navigate() {
+    if (this.route.url !== '/login') {
+      this.isRouterLinkDisabled = false;
+    } else if (this.route.url === '/login') {
+      alert('nope');
+    }
+  }
+}

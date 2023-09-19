@@ -4,6 +4,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { CartBag } from '../interfaces';
 import { PaymentformComponent } from '../paymentform/paymentform.component';
 import { AppVoucherComponent } from '../app-voucher/app-voucher.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-app-cart',
@@ -92,7 +93,7 @@ export class AppCartComponent {
   showVoucher: boolean = true;
   buttonHidden: boolean = false;
 
-  constructor(public cartService: CartService) {}
+  constructor(public cartService: CartService, private route: Router) {}
 
   shouldShowDiscountTotal(): boolean {
     return this.cartTotal() !== this.discountedTotal() && this.cartTotal() > 0;
