@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-header',
   template: `<div class="flex flex-row justify-between mb-2">
     <div
-      [routerLink]="isRouterLinkDisabled ? [] : ['/home']"
-      (click)="navigate()"
+      [routerLink]="['/home']"
+      [class.disabled]="!isUserAuthenticated"
       class="flex space-x-2 px-4 py-1 text-sm font-semibold text-green-600 rounded-full border border-green-600  hover:text-white hover:bg-green-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 mr-2"
     >
       <svg
@@ -28,8 +29,8 @@ import { Router, RouterLink } from '@angular/router';
     </div>
     <div class="flex justify-center items-center">
       <button
-        [routerLink]="isRouterLinkDisabled ? [] : ['/checkout']"
-        (click)="navigate()"
+        [routerLink]="['/checkout']"
+        [class.disabled]="!isUserAuthenticated"
         class="px-4 py-1 text-sm text-purple-600 font-semibold border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
       >
         <svg
@@ -53,14 +54,9 @@ import { Router, RouterLink } from '@angular/router';
   imports: [CommonModule, RouterLink],
 })
 export class HeaderComponent {
-  isRouterLinkDisabled: boolean = true;
-  constructor(private route: Router) {}
+  constructor(private route: Router, private authService: AuthService) {}
 
-  navigate() {
-    if (this.route.url !== '/login') {
-      this.isRouterLinkDisabled = false;
-    } else if (this.route.url === '/login') {
-      alert('nope');
-    }
+  isUserAuthenticated(): boolean {
+    return this.authService.getIsAuthenticated();
   }
 }

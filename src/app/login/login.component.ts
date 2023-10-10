@@ -7,11 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
+import { NotificationMsgComponent } from '../notification-msg/notification-msg.component';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterOutlet],
+  imports: [ReactiveFormsModule, NgIf, RouterOutlet, NotificationMsgComponent],
   template: `
     <div class="container px-4 py-4">
       <div class="flex justify-center justify-items-center flex-row ">
@@ -31,17 +33,12 @@ import { Router, RouterOutlet } from '@angular/router';
 
               <div>
                 <span
-                  *ngIf="
-                    this.loginForm.controls['username'].dirty && usernameValid()
-                  "
+                  *ngIf="this.loginForm.controls['username'].dirty"
                   class="text-green-600"
                   >✓</span
                 >
                 <span
-                  *ngIf="
-                    this.loginForm.controls['username'].dirty &&
-                    !usernameValid()
-                  "
+                  *ngIf="this.loginForm.controls['username'].dirty"
                   class="text-red-600"
                   >❌</span
                 >
@@ -59,17 +56,12 @@ import { Router, RouterOutlet } from '@angular/router';
 
               <div class="flex justify">
                 <span
-                  *ngIf="
-                    this.loginForm.controls['password'].dirty && passwordValid()
-                  "
+                  *ngIf="this.loginForm.controls['password'].dirty"
                   class="text-green-600"
                   >✓</span
                 >
                 <span
-                  *ngIf="
-                    this.loginForm.controls['password'].dirty &&
-                    !passwordValid()
-                  "
+                  *ngIf="this.loginForm.controls['password'].dirty"
                   class="text-red-600"
                   >❌</span
                 >
@@ -79,9 +71,7 @@ import { Router, RouterOutlet } from '@angular/router';
             <div
               class=" px-4 py-1 border rounded-full border-green-600 text-sm text-green-600  hover:text-white hover:bg-green-600 hover:border-transparent"
             >
-              <button (click)="onSubmit()" [disabled]="!loginValid()">
-                Login
-              </button>
+              <button (click)="onSubmit()">Login</button>
             </div>
           </div>
         </form>
@@ -92,7 +82,12 @@ import { Router, RouterOutlet } from '@angular/router';
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showOutlet: boolean = true;
-  constructor(private router: Router, private formBuilder: FormBuilder) {}
+
+  constructor(
+    private router: Router,
+    private formBuilder: FormBuilder,
+    private authService: AuthService
+  ) {}
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       username: [
@@ -102,18 +97,28 @@ export class LoginComponent implements OnInit {
       password: ['', [Validators.required, Validators.pattern('[0-9]{3,4}')]],
     });
   }
-  onSubmit() {
-    if (this.loginValid()) {
+  onSubmit(): void {
+    const username = this.loginForm.get('username')?.value;
+    const password = this.loginForm.get('password')?.value;
+    console.log(username, password);
+
+    if (this.authService.login(username, password)) {
       this.router.navigate(['/home']);
+    } else {
+      console.log('nonononono');
     }
+
+    // if (this.loginValid()) {
+    //   this.router.navigate(['/home']);
+    // }
   }
-  usernameValid(): boolean {
-    return this.loginForm.controls['username'].status === 'VALID';
-  }
-  passwordValid(): boolean {
-    return this.loginForm.controls['password'].status === 'VALID';
-  }
-  loginValid(): boolean {
-    return this.loginForm.status === 'VALID';
-  }
+  // usernameValid(): boolean {
+  //   return this.loginForm.controls['username'].status === 'VALID';
+  // }
+  // passwordValid(): boolean {
+  //   return this.loginForm.controls['password'].status === 'VALID';
+  // }
+  // loginValid(): boolean {
+  //   return this.loginForm.status === 'VALID';
+  // }
 }

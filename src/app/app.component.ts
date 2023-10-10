@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { NgIf } from '@angular/common';
 
