@@ -2,7 +2,7 @@ import { Component, Signal } from '@angular/core';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from '../../api-client.service';
 import { RouterLink } from '@angular/router';
-import { NgFor } from '@angular/common';
+import { CurrencyPipe, NgFor } from '@angular/common';
 import { Product } from '../interfaces';
 
 @Component({
@@ -10,7 +10,9 @@ import { Product } from '../interfaces';
   template: `
     <div class="flex flex-col justify-center items-center space-y-2 ">
       <div *ngFor="let product of products">
-        <span> {{ product.name }} : {{ product.price }}€ </span>
+        <span>
+          {{ product.name }} : {{ product.price | currency : currentCurrency }}
+        </span>
         <button
           class="px-4 py-1 text-sm text-blue-600 font-semibold rounded-full border border-blue-600 hover:text-white hover:bg-blue-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2"
           type="button"
@@ -40,11 +42,12 @@ import { Product } from '../interfaces';
     </div>
   `,
   standalone: true,
-  imports: [RouterLink, NgFor],
+  imports: [RouterLink, NgFor, CurrencyPipe],
 })
 export class ProductListComponent {
   products: Product[] = [];
   totalItemsInCart: Signal<number> = this.cartService.cartTotalQuantity;
+  currentCurrency: string = 'EUR';
 
   constructor(
     private cartService: CartService,

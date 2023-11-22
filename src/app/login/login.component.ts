@@ -1,14 +1,13 @@
 import { NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
+  FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { NotificationMsgComponent } from '../notification-msg/notification-msg.component';
-import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +22,7 @@ import { AuthService } from '../auth.service';
               <div><label for="username">Username:</label></div>
               <div>
                 <input
-                  class="border border-black"
+                  class=" form-control border border-black"
                   type="text"
                   id="username"
                   formControlName="username"
@@ -31,17 +30,13 @@ import { AuthService } from '../auth.service';
                 />
               </div>
 
-              <div>
-                <span
-                  *ngIf="this.loginForm.controls['username'].dirty"
-                  class="text-green-600"
-                  >✓</span
-                >
-                <span
-                  *ngIf="this.loginForm.controls['username'].dirty"
-                  class="text-red-600"
-                  >❌</span
-                >
+              <div
+                *ngIf="username.valid && (username.dirty || username.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="username.errors?.['required']">
+                  Name is required.
+                </div>
               </div>
             </div>
             <div class="flex flex-row items-center space-x-2">
@@ -54,24 +49,23 @@ import { AuthService } from '../auth.service';
                 required
               />
 
-              <div class="flex justify">
-                <span
-                  *ngIf="this.loginForm.controls['password'].dirty"
-                  class="text-green-600"
-                  >✓</span
-                >
-                <span
-                  *ngIf="this.loginForm.controls['password'].dirty"
-                  class="text-red-600"
-                  >❌</span
-                >
+              <div
+                *ngIf="!password.valid && (password.dirty || password.touched)"
+                class="alert alert-danger"
+              >
+                <div *ngIf="password.errors?.['required']">
+                  Password is required.
+                </div>
+                <div *ngIf="password.errors?.['minlength']">
+                  Password must be at least 4 characters long.
+                </div>
               </div>
             </div>
 
             <div
               class=" px-4 py-1 border rounded-full border-green-600 text-sm text-green-600  hover:text-white hover:bg-green-600 hover:border-transparent"
             >
-              <button (click)="onSubmit()">Login</button>
+              <button type="submit" [disabled]="!loginForm.valid">Login</button>
             </div>
           </div>
         </form>
@@ -83,34 +77,24 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   showOutlet: boolean = true;
 
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private authService: AuthService
-  ) {}
+  constructor(private router: Router) {}
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      username: [
-        '',
-        [Validators.required, Validators.pattern('^((?:[A-Za-z]+ ?){1,3})')],
-      ],
-      password: ['', [Validators.required, Validators.pattern('[0-9]{3,4}')]],
+    this.loginForm = new FormGroup({
+      username: new FormControl('', Validators.required),
+      password: new FormControl('', [
+        Validators.required,
+        Validators.minLength(4),
+      ]),
     });
   }
+  get username() {
+    return this.loginForm.get('username')?.value;
+  }
+  get password() {
+    return this.loginForm.get('password')?.value;
+  }
   onSubmit(): void {
-    const username = this.loginForm.get('username')?.value;
-    const password = this.loginForm.get('password')?.value;
-    console.log(username, password);
-
-    if (this.authService.login(username, password)) {
-      this.router.navigate(['/home']);
-    } else {
-      console.log('nonononono');
-    }
-
-    // if (this.loginValid()) {
-    //   this.router.navigate(['/home']);
-    // }
+    console.warn(this.loginForm.value);
   }
   // usernameValid(): boolean {
   //   return this.loginForm.controls['username'].status === 'VALID';

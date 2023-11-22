@@ -1,4 +1,4 @@
-import { Component, Signal, WritableSignal, signal } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../app-cart/app-cart.service';
 import { ApiClientService } from 'src/api-client.service';

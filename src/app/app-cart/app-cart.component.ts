@@ -1,6 +1,6 @@
 import { Component, Signal } from '@angular/core';
 import { CartService } from './app-cart.service';
-import { NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, DecimalPipe, NgFor, NgIf } from '@angular/common';
 import { CartBag } from '../interfaces';
 import { PaymentformComponent } from '../paymentform/paymentform.component';
 import { AppVoucherComponent } from '../app-voucher/app-voucher.component';
@@ -41,7 +41,12 @@ import { Router } from '@angular/router';
               >{{ cartProduct.product.name }}:
               {{ cartProduct.quantity() }}</span
             >
-            <span> Cost: {{ cartProduct.totalPrice().toFixed(2) }}€</span>
+            <span>
+              Cost:
+              {{
+                cartProduct.totalPrice() | number | currency : currentCurrency
+              }}</span
+            >
 
             <span
               *ngIf="
@@ -49,14 +54,19 @@ import { Router } from '@angular/router';
               "
             >
               Discounted Cost:
-              {{ cartProduct.discountedTotalPrice().toFixed(2) }}€</span
+              {{
+                cartProduct.discountedTotalPrice()
+                  | number
+                  | currency : currentCurrency
+              }}</span
             >
           </div>
         </div>
-        <div>Total:{{ cartTotal().toFixed(2) }}€</div>
+        <div>Total:{{ cartTotal() | number | currency : currentCurrency }}</div>
 
         <div *ngIf="shouldShowDiscountTotal()">
-          Discounted Total: {{ discountedTotal().toFixed(2) }}
+          Discounted Total:
+          {{ discountedTotal() | number | currency : currentCurrency }}
         </div>
       </div>
       <div *ngIf="showVoucher">
@@ -83,7 +93,14 @@ import { Router } from '@angular/router';
     </div>
   `,
   standalone: true,
-  imports: [NgFor, NgIf, PaymentformComponent, AppVoucherComponent],
+  imports: [
+    NgFor,
+    NgIf,
+    PaymentformComponent,
+    AppVoucherComponent,
+    DecimalPipe,
+    CurrencyPipe,
+  ],
 })
 export class AppCartComponent {
   cartTotal: Signal<number> = this.cartService.cartTotalPrice;
@@ -92,6 +109,7 @@ export class AppCartComponent {
   showPaymentForm: boolean = true;
   showVoucher: boolean = true;
   buttonHidden: boolean = false;
+  currentCurrency: string = 'EUR';
 
   constructor(public cartService: CartService, private route: Router) {}
 

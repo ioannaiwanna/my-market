@@ -7,7 +7,7 @@ import { NgIf } from '@angular/common';
   selector: 'app-root',
   template: `
     <header class="p-4 sm:w-full md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto">
-      <app-header></app-header>
+      <app-header />
     </header>
 
     <main class="container mx-auto p-4">
