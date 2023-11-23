@@ -18,3 +18,7 @@ export interface CartBag {
   totalPrice: Signal<number>;
   discountedTotalPrice: Signal<number>;
 }
+export interface User {
+  username: string;
+  password: string;
+}

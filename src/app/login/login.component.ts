@@ -5,6 +5,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  AbstractControl,
 } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { NotificationMsgComponent } from '../notification-msg/notification-msg.component';
@@ -16,7 +17,7 @@ import { NotificationMsgComponent } from '../notification-msg/notification-msg.c
   template: `
     <div class="container px-4 py-4">
       <div class="flex justify-center justify-items-center flex-row ">
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="loginForm">
           <div class="flex flex-col justify-center items-center space-y-2">
             <div class="flex flex-row items-center space-x-2">
               <div><label for="username">Username:</label></div>
@@ -31,10 +32,12 @@ import { NotificationMsgComponent } from '../notification-msg/notification-msg.c
               </div>
 
               <div
-                *ngIf="username.valid && (username.dirty || username.touched)"
+                *ngIf="
+                  username?.invalid && (username?.dirty || username?.touched)
+                "
                 class="alert alert-danger"
               >
-                <div *ngIf="username.errors?.['required']">
+                <div *ngIf="username?.errors?.['required']">
                   Name is required.
                 </div>
               </div>
@@ -50,13 +53,16 @@ import { NotificationMsgComponent } from '../notification-msg/notification-msg.c
               />
 
               <div
-                *ngIf="!password.valid && (password.dirty || password.touched)"
+                *ngIf="
+                  password?.invalid &&
+                  (password?.dirty || password?.touched || submitAttempted)
+                "
                 class="alert alert-danger"
               >
-                <div *ngIf="password.errors?.['required']">
+                <div *ngIf="password?.errors?.['required']">
                   Password is required.
                 </div>
-                <div *ngIf="password.errors?.['minlength']">
+                <div *ngIf="password?.errors?.['minlength']">
                   Password must be at least 4 characters long.
                 </div>
               </div>
@@ -65,7 +71,13 @@ import { NotificationMsgComponent } from '../notification-msg/notification-msg.c
             <div
               class=" px-4 py-1 border rounded-full border-green-600 text-sm text-green-600  hover:text-white hover:bg-green-600 hover:border-transparent"
             >
-              <button type="submit" [disabled]="!loginForm.valid">Login</button>
+              <button
+                type="submit"
+                (click)="onSubmit()"
+                [disabled]="!loginForm.valid"
+              >
+                Login
+              </button>
             </div>
           </div>
         </form>
@@ -75,12 +87,15 @@ import { NotificationMsgComponent } from '../notification-msg/notification-msg.c
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  showOutlet: boolean = true;
+  submitAttempted = false;
 
   constructor(private router: Router) {}
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      username: new FormControl('', Validators.required),
+      username: new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+      ]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(4),
@@ -88,21 +103,12 @@ export class LoginComponent implements OnInit {
     });
   }
   get username() {
-    return this.loginForm.get('username')?.value;
+    return this.loginForm.get('username');
   }
   get password() {
-    return this.loginForm.get('password')?.value;
+    return this.loginForm.get('password');
   }
   onSubmit(): void {
-    console.warn(this.loginForm.value);
+    this.router.navigate(['/home']);
   }
-  // usernameValid(): boolean {
-  //   return this.loginForm.controls['username'].status === 'VALID';
-  // }
-  // passwordValid(): boolean {
-  //   return this.loginForm.controls['password'].status === 'VALID';
-  // }
-  // loginValid(): boolean {
-  //   return this.loginForm.status === 'VALID';
-  // }
 }

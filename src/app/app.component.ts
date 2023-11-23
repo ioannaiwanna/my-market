@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header/header.component';
 import { NgIf } from '@angular/common';
 
@@ -17,6 +17,10 @@ import { NgIf } from '@angular/common';
   standalone: true,
   imports: [RouterOutlet, HeaderComponent, NgIf],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'myMarket';
+  constructor(private router: Router) {}
+  ngOnInit(): void {
+    this.router.navigate(['/login']);
+  }
 }
