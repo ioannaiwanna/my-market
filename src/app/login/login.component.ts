@@ -5,10 +5,10 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
-  AbstractControl,
 } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { NotificationMsgComponent } from '../notification-msg/notification-msg.component';
+import { FormStateServiceService } from '../form-state-service.service';
 
 @Component({
   selector: 'app-login',
@@ -89,7 +89,10 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   submitAttempted = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private formStateService: FormStateServiceService
+  ) {}
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       username: new FormControl('', [
@@ -101,6 +104,9 @@ export class LoginComponent implements OnInit {
         Validators.minLength(4),
       ]),
     });
+    this.loginForm.statusChanges.subscribe((status) => {
+      this.formStateService.setFromValidity(status === 'VALID');
+    });
   }
   get username() {
     return this.loginForm.get('username');
@@ -108,6 +114,7 @@ export class LoginComponent implements OnInit {
   get password() {
     return this.loginForm.get('password');
   }
+
   onSubmit(): void {
     this.router.navigate(['/home']);
   }
