@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormStateServiceService } from '../form-state-service.service';
 
@@ -54,7 +54,8 @@ import { FormStateServiceService } from '../form-state-service.service';
 export class HeaderComponent implements OnInit {
   isFormValid: () => boolean;
   constructor(
-    private route: Router,
+    private location: Location,
+    private router: Router,
     private formStateService: FormStateServiceService
   ) {
     this.isFormValid = () => false;
@@ -64,9 +65,14 @@ export class HeaderComponent implements OnInit {
   }
   navigate(path: string) {
     if (this.isFormValid()) {
-      this.route.navigate([path]);
+      this.router.navigate([path]);
     } else {
-      alert('login not valid');
+      this.router.navigate(['/notification'], {
+        queryParams: { message: 'LOGIN NOT VALID' },
+      });
+      setTimeout(() => {
+        this.location.back();
+      }, 3000);
     }
   }
 }

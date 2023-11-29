@@ -1,7 +1,6 @@
-import { NgIf } from '@angular/common';
+import { NgIf, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -95,31 +94,16 @@ import { Router } from '@angular/router';
         <div
           class="px-4 py-1 text-sm text-purple-600 border-purple-600 rounded-full border hover:text-white hover:bg-violet-600 hover:border-transparent"
         >
-          <button
-            type="submit"
-            (click)="submitForm()"
-            [disabled]="!cardForm.valid"
-          >
-            Pay
-          </button>
+          <button type="submit" (click)="onSubmit()">Pay</button>
         </div>
       </div>
     </form>
-    <!-- <div *ngIf="isFormSubmitted">
-      <app-notification-msg
-        *ngIf="isFormSubmitted"
-        [message]="message"
-        (close)="closeNotification()"
-      ></app-notification-msg>
-    </div> -->
   `,
 })
 export class PaymentformComponent implements OnInit {
   cardForm!: FormGroup;
-  isFormSubmitted: boolean = false;
-  message = '';
 
-  constructor(private formBuilder: FormBuilder, private route: Router) {}
+  constructor(private route: Router, private location: Location) {}
   ngOnInit(): void {
     this.cardForm = new FormGroup({
       cardNumber: new FormControl('', [
@@ -153,33 +137,14 @@ export class PaymentformComponent implements OnInit {
     return this.cardForm.get('cvv');
   }
 
-  submitForm() {
+  onSubmit(): void {
     if (this.cardForm.valid) {
-      this.openNotification();
-      console.log('hey');
+      this.route.navigate(['/notification'], {
+        queryParams: { message: 'GOOD BYEEEEEEE!' },
+      });
+      setTimeout(() => {
+        this.location.back();
+      }, 3000);
     }
-  }
-
-  // cardNumberValid(): boolean {
-  //   return this.cardForm.controls['cardNumber'].status === 'VALID';
-  // }
-  // cardNameValid(): boolean {
-  //   return this.cardForm.controls['cardName'].status === 'VALID';
-  // }
-  // expirationDateValid(): boolean {
-  //   return this.cardForm.controls['expirationDate'].status === 'VALID';
-  // }
-  // cvvValid(): boolean {
-  //   return this.cardForm.controls['cvv'].status === 'VALID';
-  // }
-  // formValid(): boolean {
-  //   return this.cardForm.status === 'VALID';
-  // }
-  openNotification() {
-    this.isFormSubmitted = true;
-    this.message = 'GoodBye<3';
-  }
-  closeNotification() {
-    this.route.navigate(['/login']);
   }
 }

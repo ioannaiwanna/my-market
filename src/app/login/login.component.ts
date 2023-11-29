@@ -54,8 +54,7 @@ import { FormStateServiceService } from '../form-state-service.service';
 
               <div
                 *ngIf="
-                  password?.invalid &&
-                  (password?.dirty || password?.touched || submitAttempted)
+                  password?.invalid && (password?.dirty || password?.touched)
                 "
                 class="alert alert-danger"
               >
@@ -71,13 +70,7 @@ import { FormStateServiceService } from '../form-state-service.service';
             <div
               class=" px-4 py-1 border rounded-full border-green-600 text-sm text-green-600  hover:text-white hover:bg-green-600 hover:border-transparent"
             >
-              <button
-                type="submit"
-                (click)="onSubmit()"
-                [disabled]="!loginForm.valid"
-              >
-                Login
-              </button>
+              <button type="submit" (click)="onSubmit()">Login</button>
             </div>
           </div>
         </form>
@@ -87,7 +80,6 @@ import { FormStateServiceService } from '../form-state-service.service';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  submitAttempted = false;
 
   constructor(
     private router: Router,
@@ -116,6 +108,12 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.router.navigate(['/home']);
+    if (this.loginForm.valid) {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/notification'], {
+        queryParams: { message: 'LOGIN NOT VALID' },
+      });
+    }
   }
 }
