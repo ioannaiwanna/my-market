@@ -52,21 +52,21 @@ import { FormStateServiceService } from '../form-state-service.service';
   imports: [CommonModule, RouterLink],
 })
 export class HeaderComponent implements OnInit {
-  isFormValid: boolean = false;
+  isFormValid: () => boolean;
   constructor(
     private route: Router,
     private formStateService: FormStateServiceService
-  ) {}
+  ) {
+    this.isFormValid = () => false;
+  }
   ngOnInit(): void {
-    this.formStateService.formValid$.subscribe((isValid) => {
-      this.isFormValid = isValid;
-    });
+    this.isFormValid = this.formStateService.getFormValidity();
   }
   navigate(path: string) {
-    if (this.isFormValid) {
+    if (this.isFormValid()) {
       this.route.navigate([path]);
     } else {
-      alert('form not valid');
+      alert('login not valid');
     }
   }
 }
